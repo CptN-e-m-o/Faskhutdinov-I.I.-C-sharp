@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hydroplane.cs" />
+    <Compile Include="MyPlane.cs" />
+    <Compile Include="Vehicle.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="FormPlane.cs">
       <SubType>Form</SubType>
@@ -53,7 +56,7 @@
     <Compile Include="FormPlane.Designer.cs">
       <DependentUpon>FormPlane.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plane.cs" />
+    <Compile Include="ITransport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormPlane.resx">

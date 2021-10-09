@@ -12,14 +12,14 @@ namespace WindowsFormsPlanes
 {
     public partial class FormPlane : Form
     {
-        private Hydroplane plane;
+        private ITransport plane;
         public FormPlane()
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Метод отрисовки машины
+        /// Метод отрисовки самолёта
         /// </summary>
         private void Draw()
         {
@@ -32,16 +32,29 @@ namespace WindowsFormsPlanes
         /// Обработка нажатия кнопки "Создать"
         /// </summary>
 
-
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void buttonCreate_Click(object sender, EventArgs e)
         {
             Random rnd = new Random();
-            plane = new Hydroplane();
-            plane.Init(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Blue,
-            Color.Yellow, true, true, true); plane.SetPosition(rnd.Next(10, 100),
-            rnd.Next(10, 100), pictureBoxPlane.Width, pictureBoxPlane.Height);
+            plane = new MyPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Blue);
+            plane.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxPlane.Width,
+            pictureBoxPlane.Height);
+            Draw();
+        }
+
+        /// <summary>
+        /// Обработка нажатия кнопки "Создать гидроплан"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonCreateHydroplane_Click(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            plane = new Hydroplane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Blue,
+            Color.Yellow, true, true, true);
+            plane.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxPlane.Width,
+            pictureBoxPlane.Height);
             Draw();
         }
         /// <summary>
@@ -74,5 +87,6 @@ namespace WindowsFormsPlanes
             }
             Draw();
         }
+
     }
 }
