@@ -56,6 +56,7 @@
             this.buttonCreatePlane.TabIndex = 1;
             this.buttonCreatePlane.Text = "Создать самолёт";
             this.buttonCreatePlane.UseVisualStyleBackColor = true;
+            this.buttonCreatePlane.Visible = false;
             this.buttonCreatePlane.Click += new System.EventHandler(this.buttonCreate_Click);
             // 
             // buttonRight
@@ -114,6 +115,7 @@
             this.buttonCreateHydroplane.TabIndex = 6;
             this.buttonCreateHydroplane.Text = "Создать гидросамолёт";
             this.buttonCreateHydroplane.UseVisualStyleBackColor = true;
+            this.buttonCreateHydroplane.Visible = false;
             this.buttonCreateHydroplane.Click += new System.EventHandler(this.buttonCreateHydroplane_Click);
             // 
             // FormPlane
@@ -129,7 +131,7 @@
             this.Controls.Add(this.buttonCreatePlane);
             this.Controls.Add(this.pictureBoxPlane);
             this.Name = "FormPlane";
-            this.Text = "Самолёт";
+            this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlane)).EndInit();
             this.ResumeLayout(false);
 

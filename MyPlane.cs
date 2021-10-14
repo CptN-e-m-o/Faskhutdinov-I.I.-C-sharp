@@ -10,11 +10,11 @@ namespace WindowsFormsPlanes
     public class MyPlane : Vehicle
     {
         /// <summary>
-        /// Ширина отрисовки самолёта
+        /// Ширина отрисовки автомобиля
         /// </summary>
         protected readonly int planeWidth = 90;
         /// <summary>
-        /// Высота отрисовки самолёта
+        /// Высота отрисовки автомобиля
         /// </summary>
         protected readonly int planeHeight = 50;
         /// <summary>
@@ -30,7 +30,7 @@ namespace WindowsFormsPlanes
             MainColor = mainColor;
         }
         /// <summary>
-        /// Конструкторс изменением размеров самолёта
+        /// Конструкторс изменением размеров машины
         /// </summary>
         /// <param name="maxSpeed">Максимальная скорость</param>
         /// <param name="weight">Вес самолёта</param>
@@ -46,6 +46,7 @@ namespace WindowsFormsPlanes
             this.planeWidth = planeWidth;
             this.planeHeight = planeHeight;
         }
+
         public override void MoveTransport(Direction direction)
         {
             float step = MaxSpeed * 100 / Weight;
@@ -82,6 +83,7 @@ namespace WindowsFormsPlanes
 
             }
         }
+
         public override void DrawTransport(Graphics g)
         {
             Pen pen = new Pen(Color.Black);

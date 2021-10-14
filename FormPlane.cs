@@ -19,6 +19,16 @@ namespace WindowsFormsPlanes
         }
 
         /// <summary>
+        /// Передача самолёта на форму
+        /// </summary>
+        /// <param name="plane"></param>
+        public void SetPlane(ITransport plane)
+        {
+            this.plane = plane;
+            Draw();
+        }
+
+        /// <summary>
         /// Метод отрисовки самолёта
         /// </summary>
         private void Draw()
@@ -32,6 +42,7 @@ namespace WindowsFormsPlanes
         /// Обработка нажатия кнопки "Создать"
         /// </summary>
 
+
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void buttonCreate_Click(object sender, EventArgs e)
@@ -44,7 +55,7 @@ namespace WindowsFormsPlanes
         }
 
         /// <summary>
-        /// Обработка нажатия кнопки "Создать гидроплан"
+        /// Обработка нажатия кнопки "Создать гоночный автомобиль"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
