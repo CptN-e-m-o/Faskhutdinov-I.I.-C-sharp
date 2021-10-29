@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace WindowsFormsPlanes
 {
-    class Hydroplane : MyPlane
+    class Hydroplane : Plane
     {
         /// <summary>
         /// Дополнительный цвет

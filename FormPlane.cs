@@ -48,7 +48,7 @@ namespace WindowsFormsPlanes
         private void buttonCreate_Click(object sender, EventArgs e)
         {
             Random rnd = new Random();
-            plane = new MyPlane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Blue);
+            plane = new Plane(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Blue);
             plane.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxPlane.Width,
             pictureBoxPlane.Height);
             Draw();
