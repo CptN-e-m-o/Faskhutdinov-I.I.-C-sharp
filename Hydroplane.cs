@@ -48,6 +48,10 @@ base(maxSpeed, weight, mainColor, 100, 60)
             BackFloat = backFloat;
         }
 
+        public void SetDopColor(Color color)
+        {
+            DopColor = color;
+        }
         public override void DrawTransport(Graphics g)
         {
             Pen pen = new Pen(Color.Black);

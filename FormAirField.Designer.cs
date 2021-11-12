@@ -39,7 +39,6 @@
             this.maskedTextBoxNumber = new System.Windows.Forms.MaskedTextBox();
             this.labelPlace = new System.Windows.Forms.Label();
             this.labelTakePlane = new System.Windows.Forms.Label();
-            this.buttonParkHydroplane = new System.Windows.Forms.Button();
             this.buttonParkPlane = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxParking)).BeginInit();
             this.groupBoxButtons.SuspendLayout();
@@ -65,7 +64,6 @@
             this.groupBoxButtons.Controls.Add(this.maskedTextBoxNumber);
             this.groupBoxButtons.Controls.Add(this.labelPlace);
             this.groupBoxButtons.Controls.Add(this.labelTakePlane);
-            this.groupBoxButtons.Controls.Add(this.buttonParkHydroplane);
             this.groupBoxButtons.Controls.Add(this.buttonParkPlane);
             this.groupBoxButtons.Location = new System.Drawing.Point(696, 0);
             this.groupBoxButtons.Name = "groupBoxButtons";
@@ -90,6 +88,7 @@
             this.listBoxAirFields.Name = "listBoxAirFields";
             this.listBoxAirFields.Size = new System.Drawing.Size(93, 95);
             this.listBoxAirFields.TabIndex = 9;
+            this.listBoxAirFields.SelectedIndexChanged += new System.EventHandler(this.listBoxParkings_SelectedIndexChanged);
             // 
             // addAirField
             // 
@@ -152,21 +151,11 @@
             this.labelTakePlane.TabIndex = 2;
             this.labelTakePlane.Text = "Забрать самолёт";
             // 
-            // buttonParkHydroplane
-            // 
-            this.buttonParkHydroplane.Location = new System.Drawing.Point(6, 335);
-            this.buttonParkHydroplane.Name = "buttonParkHydroplane";
-            this.buttonParkHydroplane.Size = new System.Drawing.Size(92, 40);
-            this.buttonParkHydroplane.TabIndex = 1;
-            this.buttonParkHydroplane.Text = "Припарковать гидросамолёт";
-            this.buttonParkHydroplane.UseVisualStyleBackColor = true;
-            this.buttonParkHydroplane.Click += new System.EventHandler(this.buttonParkHydroplane_Click);
-            // 
             // buttonParkPlane
             // 
-            this.buttonParkPlane.Location = new System.Drawing.Point(6, 291);
+            this.buttonParkPlane.Location = new System.Drawing.Point(6, 260);
             this.buttonParkPlane.Name = "buttonParkPlane";
-            this.buttonParkPlane.Size = new System.Drawing.Size(92, 37);
+            this.buttonParkPlane.Size = new System.Drawing.Size(92, 68);
             this.buttonParkPlane.TabIndex = 0;
             this.buttonParkPlane.Text = "Припарковать самолёт";
             this.buttonParkPlane.UseVisualStyleBackColor = true;
@@ -196,7 +185,6 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBoxNumber;
         private System.Windows.Forms.Label labelPlace;
         private System.Windows.Forms.Label labelTakePlane;
-        private System.Windows.Forms.Button buttonParkHydroplane;
         private System.Windows.Forms.Button buttonParkPlane;
         private System.Windows.Forms.Button delAirFields;
         private System.Windows.Forms.ListBox listBoxAirFields;

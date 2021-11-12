@@ -95,6 +95,21 @@ namespace WindowsFormsPlanes
                 }
             }
         }
+
+        private void AddTransport(Vehicle transport)
+        {
+            if (transport != null && listBoxAirFields.SelectedIndex > -1)
+            {
+                if ((airfieldCollection[listBoxAirFields.SelectedItem.ToString()]) + transport)
+                {
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось поставить транспорт");
+                }
+            }
+        }
         /// <summary>
         /// Обработка нажатия кнопки "Припарковать самолёт"
         /// </summary>
@@ -102,23 +117,11 @@ namespace WindowsFormsPlanes
         /// <param name="e"></param>
         private void buttonParkPlane_Click(object sender, EventArgs e)
         {
-            if (listBoxAirFields.SelectedIndex > -1)
+            if (listBoxAirFields.SelectedItem != null)
             {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    var car = new Plane(100, 1000, dialog.Color);
-                    if (airfieldCollection[listBoxAirFields.SelectedItem.ToString()] +
-                    car)
-                    {
-                        Draw();
-                    }
-                    else
-                    {
-
-                        MessageBox.Show("Парковка переполнена");
-                    }
-                }
+                var typeOfTranpsortConfigForm = new PlaneConfigForm();
+                typeOfTranpsortConfigForm.AddEvent(AddTransport);
+                typeOfTranpsortConfigForm.Show();
             }
         }
 
