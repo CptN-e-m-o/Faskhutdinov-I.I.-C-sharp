@@ -28,21 +28,25 @@ namespace WindowsFormsPlanes
         private void ReloadLevels()
         {
             int index = listBoxAirFields.SelectedIndex;
+
             listBoxAirFields.Items.Clear();
-            for (int i = 0; i < airfieldCollection.Keys.Count; i++)
+            for (int i = 0; i < airfieldCollection.Keys.Count; ++i)
             {
                 listBoxAirFields.Items.Add(airfieldCollection.Keys[i]);
             }
-            if (listBoxAirFields.Items.Count > 0 && (index == -1 || index >=
-            listBoxAirFields.Items.Count))
+
+            if (listBoxAirFields.Items.Count > 0 && (index == -1 || index >= listBoxAirFields.Items.Count))
             {
                 listBoxAirFields.SelectedIndex = 0;
             }
-            else if (listBoxAirFields.Items.Count > 0 && index > -1 && index <
-            listBoxAirFields.Items.Count)
+            else if (listBoxAirFields.Items.Count > 0 && index > -1 &&
+                index < listBoxAirFields.Items.Count)
             {
                 listBoxAirFields.SelectedIndex = index;
             }
+            else if (listBoxAirFields.Items.Count == 0)
+                pictureBoxParking.Image = null;
+
         }
         /// <summary>
         /// Метод отрисовки парковки
@@ -85,14 +89,16 @@ namespace WindowsFormsPlanes
         {
             if (listBoxAirFields.SelectedIndex > -1)
             {
-                if (MessageBox.Show($"Удалить парковку { listBoxAirFields.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question) == DialogResult.Yes)
-{
-                    airfieldCollection.DelParking(AirFieldTextBox.Text);
-
+                if (MessageBox.Show($"Удалить аэродром? {listBoxAirFields.SelectedItem.ToString()}?", "Удаление",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    airfieldCollection.DelAirfield(listBoxAirFields.SelectedItem.ToString());
                     ReloadLevels();
-
                 }
+            }
+            if (listBoxAirFields.SelectedItem == null)
+            {
+                pictureBoxParking.Image = null;
             }
         }
 
@@ -178,10 +184,63 @@ namespace WindowsFormsPlanes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBoxParkings_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxAirFields_SelectedIndexChanged(object sender, EventArgs e)
         {
             Draw();
         }
 
+
+
+
+        /// <summary>
+        /// Обработка нажатия пункта меню "Сохранить"
+        /// </summary>
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (airfieldCollection.SaveData(saveFileDialog1.FileName))
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Результат",
+                   MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не сохранилось", "Результат",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+
+        /// <summary>
+        /// Обработка нажатия пункта меню "Загрузить"
+        /// </summary>
+        /// /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (airfieldCollection.LoadData(openFileDialog1.FileName))
+                {
+                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
+                   MessageBoxIcon.Information);
+                    ReloadLevels();
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
     }
+
 }
+

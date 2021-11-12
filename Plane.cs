@@ -10,13 +10,19 @@ namespace WindowsFormsPlanes
     public class Plane : Vehicle
     {
         /// <summary>
-        /// Ширина отрисовки автомобиля
+        /// Ширина отрисовки самолёта
         /// </summary>
         protected readonly int planeWidth = 90;
         /// <summary>
-        /// Высота отрисовки автомобиля
+        /// Высота отрисовки самолёта
         /// </summary>
         protected readonly int planeHeight = 50;
+
+        /// <summary>
+        /// Разделитель для записи информации по объекту в файл
+        /// </summary>
+        protected readonly char separator = ';';
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -29,8 +35,24 @@ namespace WindowsFormsPlanes
             Weight = weight;
             MainColor = mainColor;
         }
+
         /// <summary>
-        /// Конструкторс изменением размеров машины
+        /// Конструктор для загрузки с файла
+        /// </summary>
+        /// <param name="info">Информация по объекту</param>
+        public Plane(string info)
+        {
+            string[] strs = info.Split(separator);
+            if (strs.Length == 3)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+            }
+        }
+
+        /// <summary>
+        /// Конструктор с изменением размеров самолёта
         /// </summary>
         /// <param name="maxSpeed">Максимальная скорость</param>
         /// <param name="weight">Вес самолёта</param>
@@ -43,6 +65,15 @@ namespace WindowsFormsPlanes
             MaxSpeed = maxSpeed;
             Weight = weight;
             MainColor = mainColor;
+            this.planeWidth = planeWidth;
+            this.planeHeight = planeHeight;
+        }
+
+        protected Plane(int maxSpeed, float weight, int planeWidth, int
+        planeHeight)
+        {
+            MaxSpeed = maxSpeed;
+            Weight = weight;
             this.planeWidth = planeWidth;
             this.planeHeight = planeHeight;
         }
@@ -118,6 +149,11 @@ namespace WindowsFormsPlanes
 
             //Двигатель
             g.FillEllipse(MainColorBrush, _startPosX + 10, _startPosY + 15, 25, 8);
+        }
+
+        public override string ToString()
+        {
+            return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
         }
     }
 }

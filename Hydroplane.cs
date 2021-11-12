@@ -40,18 +40,45 @@ namespace WindowsFormsPlanes
 
         public Hydroplane(int maxSpeed, float weight, Color mainColor, Color dopColor,
 bool frontFloat, bool sideFloat, bool backFloat) :
-base(maxSpeed, weight, mainColor, 100, 60)
+base(maxSpeed, weight,Color.White, 100, 60)
         {
+            MainColor = mainColor;
             DopColor = dopColor;
             FrontFloat = frontFloat;
             SideFloat = sideFloat;
             BackFloat = backFloat;
         }
 
+        /// <summary>
+        /// Конструктор для загрузки с файла
+        /// </summary>
+        /// <param name="info"></param>
+        public Hydroplane(string info) : base(info)
+        {
+            string[] strs = info.Split(separator);
+            if (strs.Length == 7)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+                DopColor = Color.FromName(strs[3]);
+                FrontFloat = Convert.ToBoolean(strs[4]);
+                SideFloat = Convert.ToBoolean(strs[5]);
+                BackFloat = Convert.ToBoolean(strs[6]);
+            }
+        }
+
         public void SetDopColor(Color color)
         {
             DopColor = color;
         }
+
+        public override string ToString()
+        {
+            return
+           $"{base.ToString()}{separator}{DopColor.Name}{separator}{FrontFloat}{separator}{SideFloat}{separator}{BackFloat}";
+        }
+
         public override void DrawTransport(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
@@ -81,5 +108,6 @@ base(maxSpeed, weight, mainColor, 100, 60)
 
             base.DrawTransport(g);
         }
+
     }
 }
