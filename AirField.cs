@@ -53,25 +53,26 @@ namespace WindowsFormsPlanes
         }
         /// <summary>
         /// Перегрузка оператора сложения
-        /// Логика действия: на парковку добавляется самолет
+        /// Логика действия: на аэродром добавляется самолет
         /// </summary>
         /// <param name="p">Парковка</param>
         /// <param name="vehicle">Добавляемый самолет</param>
         /// <returns></returns>
         /// 
 
+        
         public static bool operator +(AirField<T> p, T vehicle)
         {
             if (p._places.Count >= p._maxCount)
             {
-                return false;
+                throw new AirfieldOverflowException();
             }
             p._places.Add(vehicle);
             return true;
         }
         /// <summary>
         /// Перегрузка оператора вычитания
-        /// Логика действия: с парковки забираем автомобиль
+        /// Логика действия: с аэродрома забираем самолёт
         /// </summary>
         /// <param name="p">Парковка</param>
         /// <param name="index">Индекс места, с которого пытаемся извлечь объект</param>
@@ -80,7 +81,7 @@ namespace WindowsFormsPlanes
         {
             if (index < -1 || index > p._places.Count)
             {
-                return null;
+                throw new AirfieldNotFoundException(index);
             }
             T vehicle = p._places[index];
             p._places.RemoveAt(index);
@@ -129,7 +130,7 @@ namespace WindowsFormsPlanes
 
 
         /// <summary>
-        /// Функция получения элементы из списка
+        /// Функция получения элемента из списка
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>

@@ -118,9 +118,8 @@ namespace WindowsFormsPlanes
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new FileNotFoundException();
             }
-
             using (StreamReader streamReader = new StreamReader
             (filename, System.Text.Encoding.Default))
             {
@@ -130,7 +129,7 @@ namespace WindowsFormsPlanes
                 }
                 else
                 {
-                    return false;
+                    throw new FormatException("Неверный формат файла");
                 }
                 Vehicle transport = null;
                 string key = string.Empty;
@@ -154,7 +153,7 @@ namespace WindowsFormsPlanes
                         }
                         if (!(airfieldStages[key] + transport))
                         {
-                            return false;
+                            throw new TypeLoadException("Не удалось загрузить автомобиль на парковку");
                         }
                     }
                 }

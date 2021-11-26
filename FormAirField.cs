@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,15 +13,24 @@ namespace WindowsFormsPlanes
 {
     public partial class FormAirField : Form
     {
+
         /// <summary>
-        /// Объект от класса-аэродрома
+        /// Объект от класса коллекции аэродрома
         /// </summary>
         private readonly AirFieldCollection airfieldCollection;
+
+
+        /// <summary>
+        /// Логгер
+        /// </summary>
+        private readonly Logger logger;
+
         public FormAirField()
         {
             InitializeComponent();
             airfieldCollection = new AirFieldCollection(pictureBoxParking.Width, pictureBoxParking.Height);
             Draw();
+            logger = LogManager.GetCurrentClassLogger();
         }
         /// <summary>
         /// Заполнение listBoxLevels
@@ -72,10 +82,11 @@ namespace WindowsFormsPlanes
         {
             if (string.IsNullOrEmpty(AirFieldTextBox.Text))
             {
-                MessageBox.Show("Введите название парковки", "Ошибка",
+                MessageBox.Show("Введите название аэродрома", "Ошибка",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            logger.Info($"Добавили аэродром {AirFieldTextBox.Text}");
             airfieldCollection.AddParking(AirFieldTextBox.Text);
             ReloadLevels();
         }
@@ -92,6 +103,7 @@ namespace WindowsFormsPlanes
                 if (MessageBox.Show($"Удалить аэродром? {listBoxAirFields.SelectedItem.ToString()}?", "Удаление",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
+                    logger.Info($"Удалили парковку { listBoxAirFields.SelectedItem.ToString()} ");
                     airfieldCollection.DelAirfield(listBoxAirFields.SelectedItem.ToString());
                     ReloadLevels();
                 }
@@ -102,17 +114,32 @@ namespace WindowsFormsPlanes
             }
         }
 
-        private void AddTransport(Vehicle transport)
+        private void AddTransport(Vehicle plane)
         {
-            if (transport != null && listBoxAirFields.SelectedIndex > -1)
+            if (plane != null && listBoxAirFields.SelectedIndex > -1)
             {
-                if ((airfieldCollection[listBoxAirFields.SelectedItem.ToString()]) + transport)
+                try
                 {
+                    if ((airfieldCollection[listBoxAirFields.SelectedItem.ToString()]) + plane)
+                    {
+                        Draw();
+                        logger.Info($"Добавлен самолёт {plane}");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не удалось поставить транспорт");
+                    }
                     Draw();
                 }
-                else
+                catch (AirfieldOverflowException ex)
                 {
-                    MessageBox.Show("Не удалось поставить транспорт");
+                    logger.Warn("Попытка добавить самолёт на заполненный аэродром");
+                    MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn("Неудачная попытка добавления самолёта");
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -168,26 +195,45 @@ namespace WindowsFormsPlanes
         {
             if (listBoxAirFields.SelectedIndex > -1 && maskedTextBoxNumber.Text != "")
             {
-                var plane = airfieldCollection[listBoxAirFields.SelectedItem.ToString()] -
-                Convert.ToInt32(maskedTextBoxNumber.Text);
-                if (plane != null)
+                try
                 {
-                    FormPlane form = new FormPlane();
-                    form.SetPlane(plane);
-                    form.ShowDialog();
+                    var plane = airfieldCollection[listBoxAirFields.SelectedItem.ToString()] -
+                    Convert.ToInt32(maskedTextBoxNumber.Text);
+                    if (plane != null)
+                    {
+                        FormPlane form = new FormPlane();
+                        form.SetPlane(plane);
+                        form.ShowDialog();
+
+                        logger.Info($"Изъят самолёт {plane} с места { maskedTextBoxNumber.Text}");
+
+                        Draw();
+                    }
+
                 }
-                Draw();
+                catch (AirfieldNotFoundException ex)
+                {
+                    MessageBox.Show(ex.Message, "Не найдено", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
         }
-        /// <summary>
-        /// Метод обработки выбора элемента на listBoxLevels
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void listBoxAirFields_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Draw();
-        }
+            /// <summary>
+            /// Метод обработки выбора элемента на listBoxLevels
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
+            private void listBoxAirFields_SelectedIndexChanged(object sender, EventArgs e)
+            {
+            logger.Info($"Перешли на парковку{ listBoxAirFields.SelectedItem.ToString()}");
+                Draw();
+            }
 
 
 
@@ -199,42 +245,51 @@ namespace WindowsFormsPlanes
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (airfieldCollection.SaveData(saveFileDialog1.FileName))
+                try
                 {
+                    airfieldCollection.SaveData(saveFileDialog1.FileName);
                     MessageBox.Show("Сохранение прошло успешно", "Результат",
-                   MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    logger.Info("Сохранено в файл " + saveFileDialog1.FileName);
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Не сохранилось", "Результат",
-                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Неудачная попытка сохранить файл");
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
 
+            }
         }
 
 
-        /// <summary>
-        /// Обработка нажатия пункта меню "Загрузить"
-        /// </summary>
-        /// /// <param name="sender"></param>
-        /// <param name="e"></param>
+            /// <summary>
+            /// Обработка нажатия пункта меню "Загрузить"
+            /// </summary>
+            /// /// <param name="sender"></param>
+            /// <param name="e"></param>
 
-        private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
+            {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (airfieldCollection.LoadData(openFileDialog1.FileName))
+                try
                 {
+                    airfieldCollection.LoadData(openFileDialog1.FileName);
                     MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
-                   MessageBoxIcon.Information);
+                    MessageBoxIcon.Information);
+                    logger.Info("Загружено из файла " + openFileDialog1.FileName);
                     ReloadLevels();
                     Draw();
                 }
-                else
+                catch (AirfieldOverflowException ex)
                 {
-                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
-                   MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Занятое место", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                   logger.Warn("Неудачная попытка загрузки файла");
+                   MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
