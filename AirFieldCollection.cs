@@ -35,7 +35,7 @@ namespace WindowsFormsPlanes
         /// Добавление аэродрома
         /// </summary>
         /// <param name="name">Название аэродрома</param>
-        public void AddParking(string name)
+        public void AddAirfield(string name)
         {
             if (airfieldStages.ContainsKey(name))
             {
@@ -44,7 +44,7 @@ namespace WindowsFormsPlanes
             airfieldStages.Add(name, new AirField<Vehicle>(pictureWidth, pictureHeight));
         }
         /// <summary>
-        /// Удаление парковки
+        /// Удаление аэродрома
         /// </summary>
         /// <param name="name">Название аэродрома</param>
         public void DelAirfield(string name)
@@ -86,79 +86,90 @@ namespace WindowsFormsPlanes
         /// </summary>
         /// <param name="filename">Путь и имя файла</param>
         /// <returns></returns>
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
             using (StreamWriter streamWriter = new StreamWriter
             (filename, false, System.Text.Encoding.Default))
             {
                 streamWriter.WriteLine("AirfieldCollection");
-                foreach (var level in airfieldStages)
+                foreach (KeyValuePair<string, AirField<Vehicle>> level in airfieldStages)
                 {
-                    streamWriter.WriteLine("AirField" + separator + level.Key);
-
-                    ITransport plane;
-                    for (int i = 0; (plane = level.Value.GetNext(i)) != null; i++)
+                    streamWriter.WriteLine("Airfield" + separator + level.Key);
+                    foreach (ITransport vehicle in level.Value)
                     {
-                        if (plane.GetType().Name == "Plane")
+                        if (vehicle.GetType().Name == "Plane")
                         {
                             streamWriter.Write("Plane" + separator);
                         }
-                        else if (plane.GetType().Name == "Hydroplane")
+                        else if (vehicle.GetType().Name == "Hydroplane")
                         {
                             streamWriter.Write("Hydroplane" + separator);
                         }
-                        streamWriter.WriteLine(plane);
+                        streamWriter.WriteLine(vehicle);
                     }
                 }
-                return true;
             }
         }
 
-        public bool LoadData(string filename)
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
                 throw new FileNotFoundException();
             }
-            using (StreamReader streamReader = new StreamReader
-            (filename, System.Text.Encoding.Default))
+            string bufferTextFromFile = "";
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
             {
-                if (streamReader.ReadLine().Contains("AirfieldCollection"))
+                byte[] b = new byte[fs.Length];
+                UTF8Encoding temp = new UTF8Encoding(true);
+                while (fs.Read(b, 0, b.Length) > 0)
                 {
-                    airfieldStages.Clear();
+                    bufferTextFromFile += temp.GetString(b);
                 }
-                else
-                {
-                    throw new FormatException("Неверный формат файла");
-                }
-                Vehicle transport = null;
-                string key = string.Empty;
-                string line;
-                for (int i = 0; (line = streamReader.ReadLine()) != null; i++)
-                {
-                    if (line.Contains("AirField"))
-                    {
-                        key = line.Split(separator)[1];
-                        airfieldStages.Add(key, new AirField<Vehicle>(pictureWidth, pictureHeight));
-                    }
-                    else if (line.Contains(separator))
-                    {
-                        if (line.Contains("Plane"))
-                        {
-                            transport = new Plane(line.Split(separator)[1]);
-                        }
-                        else if (line.Contains("Hydroplane"))
-                        {
-                            transport = new Hydroplane(line.Split(separator)[1]);
-                        }
-                        if (!(airfieldStages[key] + transport))
-                        {
-                            throw new TypeLoadException("Не удалось загрузить автомобиль на парковку");
-                        }
-                    }
-                }
-                return true;
             }
+            bufferTextFromFile = bufferTextFromFile.Replace("\r", "");
+            var strs = bufferTextFromFile.Split('\n');
+            if (strs[0].Contains("AirfieldCollection"))
+            {
+                //очищаем записи
+                airfieldStages.Clear();
+            }
+            else
+            {
+                //если нет такой записи, то это не те данные
+                throw new Exception("Неверный формат файла");
+            }
+            Vehicle plane = null;
+            string key = string.Empty;
+            for (int i = 1; i < strs.Length; ++i)
+            {
+                //идем по считанным записям
+                if (strs[i].Contains("Airfield"))
+                {
+                    //начинаем новый аэродром
+                    key = strs[i].Split(separator)[1];
+                    airfieldStages.Add(key, new AirField<Vehicle>(pictureWidth,
+                    pictureHeight));
+                    continue;
+                }
+                if (string.IsNullOrEmpty(strs[i]))
+                {
+                    continue;
+                }
+                if (strs[i].Split(separator)[0] == "Plane")
+                {
+                    plane = new Plane(strs[i].Split(separator)[1]);
+                }
+                else if (strs[i].Split(separator)[0] == "Hydroplane")
+                {
+                    plane = new Hydroplane(strs[i].Split(separator)[1]);
+                }
+                if (!(airfieldStages[key] + plane))
+                {
+                    throw new Exception("Не удалось загрузить автомобиль на парковку");
+                }
+            }
+
         }
     }
 }

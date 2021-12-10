@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace WindowsFormsPlanes
     /// Параметризованный класс для хранения набора объектов от интерфейса ITransport
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AirField<T> where T : class, ITransport
+    public class AirField<T> : IEnumerator<T>, IEnumerable<T> where T : class, ITransport
     {
         /// <summary>
         /// Список объектов, которые храним
@@ -37,6 +38,14 @@ namespace WindowsFormsPlanes
         /// Размер парковочного места (высота)
         /// </summary>
         private readonly int _placeSizeHeight = 80;
+
+        /// <summary>
+        /// Текущий элемент для вывода через IEnumerator (будет обращаться по своему индексу к ключу словаря, по которму будет возвращаться запись)
+        /// </summary>
+        private int currentIndex;
+        public T Current => _places[currentIndex];
+        object IEnumerator.Current => _places[currentIndex];
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -50,6 +59,7 @@ namespace WindowsFormsPlanes
             pictureWidth = picWidth;
             pictureHeight = picHeight;
             _places = new List<T>();
+            currentIndex = -1;
         }
         /// <summary>
         /// Перегрузка оператора сложения
@@ -66,6 +76,10 @@ namespace WindowsFormsPlanes
             if (p._places.Count >= p._maxCount)
             {
                 throw new AirfieldOverflowException();
+            }
+            if (p._places.Contains(vehicle))
+            {
+                throw new AirfieldAlreadyHaveException();
             }
             p._places.Add(vehicle);
             return true;
@@ -141,6 +155,41 @@ namespace WindowsFormsPlanes
                 return null;
             }
             return _places[index];
+        }
+
+        public void Sort()
+        {
+            _places.Sort((IComparer<T>)new PlaneComparer());
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            currentIndex++;
+            if (currentIndex >= _places.Count)
+            {
+                Reset();
+                return false;
+            }
+            return true;
+        }
+
+        public void Reset()
+        {
+            currentIndex = -1;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
         }
     }
 }

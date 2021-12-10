@@ -79,6 +79,8 @@ base(maxSpeed, weight,Color.White, 100, 60)
            $"{base.ToString()}{separator}{DopColor.Name}{separator}{FrontFloat}{separator}{SideFloat}{separator}{BackFloat}";
         }
 
+        
+
         public override void DrawTransport(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
@@ -109,5 +111,61 @@ base(maxSpeed, weight,Color.White, 100, 60)
             base.DrawTransport(g);
         }
 
+
+        /// <summary>
+        /// Метод интерфейса IEquatable для класса Crane
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Hydroplane other)
+        {
+            var res = (this as Plane).Equals(other as Plane);
+            if (!res)
+            {
+                return res;
+            }
+            if (other == null)
+            {
+                return false;
+            }
+            if (DopColor != other.DopColor)
+            {
+                return false;
+            }
+            if (FrontFloat != other.FrontFloat)
+            {
+                return false;
+            }
+            if (SideFloat != other.SideFloat)
+            {
+                return false;
+            }
+            if (BackFloat != other.BackFloat)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Перегрузка метода от object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is Hydroplane craneObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(craneObj);
+            }
+        }
     }
 }

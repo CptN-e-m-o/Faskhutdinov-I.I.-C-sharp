@@ -39,13 +39,14 @@
             this.maskedTextBoxNumber = new System.Windows.Forms.MaskedTextBox();
             this.labelPlace = new System.Windows.Forms.Label();
             this.labelTakePlane = new System.Windows.Forms.Label();
-            this.buttonParkPlane = new System.Windows.Forms.Button();
+            this.buttonAddPlane = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.загрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.buttonSort = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxParking)).BeginInit();
             this.groupBoxButtons.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -62,6 +63,7 @@
             // 
             // groupBoxButtons
             // 
+            this.groupBoxButtons.Controls.Add(this.buttonSort);
             this.groupBoxButtons.Controls.Add(this.delAirFields);
             this.groupBoxButtons.Controls.Add(this.listBoxAirFields);
             this.groupBoxButtons.Controls.Add(this.addAirField);
@@ -71,7 +73,7 @@
             this.groupBoxButtons.Controls.Add(this.maskedTextBoxNumber);
             this.groupBoxButtons.Controls.Add(this.labelPlace);
             this.groupBoxButtons.Controls.Add(this.labelTakePlane);
-            this.groupBoxButtons.Controls.Add(this.buttonParkPlane);
+            this.groupBoxButtons.Controls.Add(this.buttonAddPlane);
             this.groupBoxButtons.Location = new System.Drawing.Point(696, 0);
             this.groupBoxButtons.Name = "groupBoxButtons";
             this.groupBoxButtons.Size = new System.Drawing.Size(105, 448);
@@ -80,9 +82,9 @@
             // 
             // delAirFields
             // 
-            this.delAirFields.Location = new System.Drawing.Point(7, 269);
+            this.delAirFields.Location = new System.Drawing.Point(5, 269);
             this.delAirFields.Name = "delAirFields";
-            this.delAirFields.Size = new System.Drawing.Size(93, 36);
+            this.delAirFields.Size = new System.Drawing.Size(95, 36);
             this.delAirFields.TabIndex = 10;
             this.delAirFields.Text = "Удалить аэродром";
             this.delAirFields.UseVisualStyleBackColor = true;
@@ -91,7 +93,7 @@
             // listBoxAirFields
             // 
             this.listBoxAirFields.FormattingEnabled = true;
-            this.listBoxAirFields.Location = new System.Drawing.Point(6, 168);
+            this.listBoxAirFields.Location = new System.Drawing.Point(5, 111);
             this.listBoxAirFields.Name = "listBoxAirFields";
             this.listBoxAirFields.Size = new System.Drawing.Size(93, 95);
             this.listBoxAirFields.TabIndex = 9;
@@ -99,7 +101,7 @@
             // 
             // addAirField
             // 
-            this.addAirField.Location = new System.Drawing.Point(6, 123);
+            this.addAirField.Location = new System.Drawing.Point(6, 66);
             this.addAirField.Name = "addAirField";
             this.addAirField.Size = new System.Drawing.Size(92, 39);
             this.addAirField.TabIndex = 8;
@@ -160,13 +162,13 @@
             // 
             // buttonParkPlane
             // 
-            this.buttonParkPlane.Location = new System.Drawing.Point(6, 311);
-            this.buttonParkPlane.Name = "buttonParkPlane";
-            this.buttonParkPlane.Size = new System.Drawing.Size(92, 68);
-            this.buttonParkPlane.TabIndex = 0;
-            this.buttonParkPlane.Text = "Припарковать самолёт";
-            this.buttonParkPlane.UseVisualStyleBackColor = true;
-            this.buttonParkPlane.Click += new System.EventHandler(this.buttonParkPlane_Click);
+            this.buttonAddPlane.Location = new System.Drawing.Point(6, 311);
+            this.buttonAddPlane.Name = "buttonParkPlane";
+            this.buttonAddPlane.Size = new System.Drawing.Size(92, 68);
+            this.buttonAddPlane.TabIndex = 0;
+            this.buttonAddPlane.Text = "Добавить транспорт";
+            this.buttonAddPlane.UseVisualStyleBackColor = true;
+            this.buttonAddPlane.Click += new System.EventHandler(this.buttonParkPlane_Click);
             // 
             // menuStrip
             // 
@@ -210,6 +212,16 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "txt file | *.txt";
             // 
+            // buttonSort
+            // 
+            this.buttonSort.Location = new System.Drawing.Point(5, 213);
+            this.buttonSort.Name = "buttonSort";
+            this.buttonSort.Size = new System.Drawing.Size(93, 23);
+            this.buttonSort.TabIndex = 11;
+            this.buttonSort.Text = "Сортировать";
+            this.buttonSort.UseVisualStyleBackColor = true;
+            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
+            // 
             // FormAirField
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -238,7 +250,7 @@
         private System.Windows.Forms.MaskedTextBox maskedTextBoxNumber;
         private System.Windows.Forms.Label labelPlace;
         private System.Windows.Forms.Label labelTakePlane;
-        private System.Windows.Forms.Button buttonParkPlane;
+        private System.Windows.Forms.Button buttonAddPlane;
         private System.Windows.Forms.Button delAirFields;
         private System.Windows.Forms.ListBox listBoxAirFields;
         private System.Windows.Forms.Button addAirField;
@@ -250,5 +262,6 @@
         private System.Windows.Forms.ToolStripMenuItem загрузитьToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button buttonSort;
     }
 }

@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirfieldAlreadyHaveException.cs" />
     <Compile Include="AirfieldNotFoundException.cs" />
     <Compile Include="AirfieldOverflowException.cs" />
     <Compile Include="FormAirField.cs">
@@ -66,6 +67,7 @@
     <Compile Include="Plane.cs" />
     <Compile Include="AirField.cs" />
     <Compile Include="AirFieldCollection.cs" />
+    <Compile Include="PlaneComparer.cs" />
     <Compile Include="PlaneConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>

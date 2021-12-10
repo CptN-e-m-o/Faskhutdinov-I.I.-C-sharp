@@ -87,7 +87,7 @@ namespace WindowsFormsPlanes
                 return;
             }
             logger.Info($"Добавили аэродром {AirFieldTextBox.Text}");
-            airfieldCollection.AddParking(AirFieldTextBox.Text);
+            airfieldCollection.AddAirfield(AirFieldTextBox.Text);
             ReloadLevels();
         }
 
@@ -120,35 +120,41 @@ namespace WindowsFormsPlanes
             {
                 try
                 {
-                    if ((airfieldCollection[listBoxAirFields.SelectedItem.ToString()]) + plane)
+                    if ((airfieldCollection[listBoxAirFields.SelectedItem.ToString()]) +
+                   plane)
                     {
                         Draw();
                         logger.Info($"Добавлен самолёт {plane}");
                     }
                     else
                     {
-                        MessageBox.Show("Не удалось поставить транспорт");
+                        MessageBox.Show("Самолёт не удалось поставить");
                     }
                     Draw();
                 }
                 catch (AirfieldOverflowException ex)
                 {
-                    logger.Warn("Попытка добавить самолёт на заполненный аэродром");
-                    MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+                catch (AirfieldAlreadyHaveException ex)
+                {
+                    MessageBox.Show(ex.Message, "Дублирование", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn("Неудачная попытка добавления самолёта");
-                    MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-        /// <summary>
-        /// Обработка нажатия кнопки "Припарковать самолёт"
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void buttonParkPlane_Click(object sender, EventArgs e)
+            /// <summary>
+            /// Обработка нажатия кнопки "Припарковать самолёт"
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
+            private void buttonParkPlane_Click(object sender, EventArgs e)
         {
             if (listBoxAirFields.SelectedItem != null)
             {
@@ -159,38 +165,9 @@ namespace WindowsFormsPlanes
         }
 
 
-        /// <summary>
-        /// Обработка нажатия кнопки "Припарковать гидроплан"
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void buttonParkHydroplane_Click(object sender, EventArgs e)
-        {
-            if (listBoxAirFields.SelectedIndex > -1)
-            {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    ColorDialog dialogDop = new ColorDialog();
-                    if (dialogDop.ShowDialog() == DialogResult.OK)
+       
 
-                    {
 
-                        var car = new Hydroplane(100, 1000, dialog.Color,
-                        dialogDop.Color, true, true, true);
-                        if (airfieldCollection[listBoxAirFields.SelectedItem.ToString()]
-+ car)
-                        {
-                            Draw();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Парковка переполнена");
-                        }
-                    }
-                }
-            }
-        }
         private void buttonTakePlane_Click(object sender, EventArgs e)
         {
             if (listBoxAirFields.SelectedIndex > -1 && maskedTextBoxNumber.Text != "")
@@ -294,7 +271,20 @@ namespace WindowsFormsPlanes
             }
         }
 
-
+        /// <summary>
+        /// Обработка нажатия кнопки "Сортировка"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSort_Click(object sender, EventArgs e)
+        {
+            if (listBoxAirFields.SelectedIndex > -1)
+            {
+                airfieldCollection[listBoxAirFields.SelectedItem.ToString()].Sort();
+                Draw();
+                logger.Info("Сортировка уровней");
+            }
+        }
     }
 
 }
